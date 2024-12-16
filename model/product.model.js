@@ -39,4 +39,5 @@ const productSchema = new Schema({
   isActive: { type: Boolean, default: true },
 });
 
-module.exports = mongoose.models.pros || mongoose.model("products", productSchema);
+module.exports =
+  mongoose.models.pros || mongoose.model("products", productSchema);

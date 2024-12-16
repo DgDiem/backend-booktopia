@@ -11,7 +11,7 @@ module.exports = {
   getPendingOrders,
   getOrderStatusByProduct,
   handleReview,
-  cancelStatusOrder
+  cancelStatusOrder,
 };
 
 async function getAll() {
@@ -164,7 +164,10 @@ async function cancelStatusOrder(id) {
     if (["Chờ xác nhận", "Đang xử lý"].includes(order.status)) {
       order.status = "Đã hủy";
       await order.save();
-      return { message: "Trạng thái đơn hàng đã được cập nhật thành công", order };
+      return {
+        message: "Trạng thái đơn hàng đã được cập nhật thành công",
+        order,
+      };
     } else {
       throw new Error("Không thể hủy đơn hàng ở trạng thái hiện tại");
     }
@@ -172,7 +175,6 @@ async function cancelStatusOrder(id) {
     throw new Error(error.message);
   }
 }
-
 
 async function getOrdersByUserId(userId) {
   try {
@@ -237,11 +239,9 @@ async function getOrderStatusByProduct(req, res) {
     });
 
     if (!order) {
-      return res
-        .status(404)
-        .json({
-          message: "Không tìm thấy sản phẩm trong đơn hàng thành công.",
-        });
+      return res.status(404).json({
+        message: "Không tìm thấy sản phẩm trong đơn hàng thành công.",
+      });
     }
 
     const product = order.listProducts.find(

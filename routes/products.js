@@ -73,8 +73,7 @@ router.get("/paginated/authorId/:author", async (req, res) => {
     res.status(500).json({ msg: "Xin lỗi, đã xảy ra lỗi" });
   }
 });
-/*Phân trang*/
-/*Phân trang*/
+
 router.get("/paginated/publishId/:publish", async (req, res) => {
   try {
     const publish = req.params.publish;
@@ -174,6 +173,15 @@ router.get("/", async (req, res) => {
     res.status(500).json({ mess: error });
   }
 });
+router.get("/admin", async (req, res) => {
+  try {
+    const product = await productController.gettAllAdmin();
+    return res.status(200).json(product);
+  } catch (error) {
+    console.log("Load sản phẩm không thành công", error);
+    res.status(500).json({ mess: error });
+  }
+});
 
 //Router hiển thị sản phẩm mới nhất
 router.get("/new", async (req, res) => {
@@ -254,6 +262,17 @@ router.get("/hot", async (req, res) => {
   }
 });
 
+//Router hiển thị sản phẩm tồn kho
+router.get("/stock", async (req, res) => {
+  try {
+    const product = await productController.getStock();
+    return res.status(200).json(product);
+  } catch (error) {
+    console.log("Load sản phẩm không thành công", error);
+    res.status(500).json({ mess: error });
+  }
+});
+
 router.put("/:id/status", async (req, res) => {
   const { id } = req.params;
   const { isActive } = req.body;
@@ -301,6 +320,7 @@ router.put("/:id/quantity", async (req, res) => {
     res.status(500).json({ message: "Lỗi khi cập nhật sản phẩm" });
   }
 });
+
 router.put("/:id/sale", async (req, res) => {
   try {
     const { id } = req.params;

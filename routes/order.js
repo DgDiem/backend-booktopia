@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
     const result = await orderController.create(req, res);
     return res.status(201).json(result);
   } catch (error) {
-    console.log("Tạo đơn hàng không thành công", error); 
+    console.log("Tạo đơn hàng không thành công", error);
     res.status(500).json({ message: "Lỗi khi tạo đơn hàng", error: error.message });
   }
 });
@@ -80,7 +80,6 @@ router.put("/:id/cancel", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
-
 
 router.get("/user/:userId", async (req, res) => {
   try {
@@ -145,6 +144,5 @@ router.put("/review/:productId", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
-
 
 module.exports = router;

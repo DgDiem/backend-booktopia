@@ -37,6 +37,8 @@ module.exports = {
   getPaginatedProductsByCategorySorted,
   getPaginatedAndSortedProducts,
   updateStatusById,
+  gettAllAdmin,
+  getStock,
 };
 
 /*Phân trang*/
@@ -79,7 +81,12 @@ async function getPaginatedAndSortedProducts(pageNumber, limit, sortBy) {
 }
 
 /*Phân trang*/
-async function getPaginatedProductsByCategorySorted(category, pageNumber, limit, sortBy) {
+async function getPaginatedProductsByCategorySorted(
+  category,
+  pageNumber,
+  limit,
+  sortBy
+) {
   try {
     // Kiểm tra category xem có hợp lệ không
     const categoryObjectId = mongoose.Types.ObjectId.isValid(category)
@@ -135,7 +142,12 @@ async function getPaginatedProductsByCategorySorted(category, pageNumber, limit,
 }
 
 /*Phân trang*/
-async function getPaginatedProductsByAuthorSorted(author, pageNumber, limit, sortBy) {
+async function getPaginatedProductsByAuthorSorted(
+  author,
+  pageNumber,
+  limit,
+  sortBy
+) {
   try {
     const totalProducts = await productModel.countDocuments({
       "author.authorId": new mongoose.Types.ObjectId(author),
@@ -174,7 +186,12 @@ async function getPaginatedProductsByAuthorSorted(author, pageNumber, limit, sor
 }
 
 /*Phân trang*/
-async function getPaginatedProductsByPublisherSorted(publish, pageNumber, limit, sortBy) {
+async function getPaginatedProductsByPublisherSorted(
+  publish,
+  pageNumber,
+  limit,
+  sortBy
+) {
   try {
     const totalProducts = await productModel.countDocuments({
       "publish.publishId": new mongoose.Types.ObjectId(publish),
@@ -286,6 +303,15 @@ async function insert(body) {
 //Hiển thị tất cả sản phẩm
 async function gettAll() {
   try {
+    const result = await productModel.find({ isActive: true });
+    return result;
+  } catch (error) {
+    console.log("Thêm sản phẩm không thành công", error);
+    throw error;
+  }
+}
+async function gettAllAdmin() {
+  try {
     const result = await productModel.find();
     return result;
   } catch (error) {
@@ -395,7 +421,11 @@ async function updateStatusById(id, isActive) {
     if (!cate) {
       throw new Error("Không tìm thấy sản phẩm");
     }
-    const result = await productModel.findByIdAndUpdate(id, { isActive }, { new: true });
+    const result = await productModel.findByIdAndUpdate(
+      id,
+      { isActive },
+      { new: true }
+    );
     return result;
   } catch (error) {
     throw error;
@@ -560,7 +590,7 @@ async function getProView() {
     const result = await productModel
       .find({ view: { $gte: 50 } })
       .sort({ view: -1 })
-      .limit(4);
+      .limit(5);
     return result;
   } catch (error) {
     console.log("Lỗi lấy sp", error);
@@ -582,7 +612,18 @@ async function getNew() {
 //Sản phẩm hot
 async function getHot() {
   try {
-    const result = await productModel.find().sort({ _id: 1 }).limit(4);
+    const result = await productModel.find().sort({ _id: -1 }).limit(5);
+    return result;
+  } catch (error) {
+    console.log("Lỗi sản phẩm hot", error);
+    throw error;
+  }
+}
+
+//Sản phẩm tồn kho
+async function getStock() {
+  try {
+    const result = await productModel.find().sort({ quantity: 1 });
     return result;
   } catch (error) {
     console.log("Lỗi sản phẩm hot", error);
@@ -644,7 +685,8 @@ async function search(name) {
   try {
     const result = await productModel.find(
       {
-        name: { $regex: name, $options: "i" }, // i :không phân biệt hoa thường
+        name: { $regex: name, $options: "i" },
+        isActive: true, // i :không phân biệt hoa thường
       },
       {
         name: 1,

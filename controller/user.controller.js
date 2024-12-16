@@ -55,6 +55,11 @@ async function login(body) {
       throw { statusCode: 404, message: "Email không tồn tại" }; // 404 Not Found
     }
 
+    // Kiểm tra trạng thái hoạt động
+    if (user.isActive === false) {
+      throw { statusCode: 403, message: "Tài khoản đã ngưng hoạt động" }; // 403 Forbidden
+    }
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw { statusCode: 401, message: "Mật khẩu không chính xác" }; // 401 Unauthorized

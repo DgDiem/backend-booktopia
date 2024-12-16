@@ -35,7 +35,7 @@ const orderSchema = new Schema({
       reviewStatus: {
         type: String,
         enum: ["Chưa đánh giá", "Đã đánh giá"],
-        default: "Chưa đánh giá", 
+        default: "Chưa đánh giá",
       },
     },
   ],
@@ -48,7 +48,13 @@ const orderSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["Chờ xác nhận", "Đang xử lý", "Đang vận chuyển", "Giao thành công", "Đã hủy"],
+    enum: [
+      "Chờ xác nhận",
+      "Đang xử lý",
+      "Đang vận chuyển",
+      "Giao thành công",
+      "Đã hủy",
+    ],
     default: "Chờ xác nhận",
   },
 });
