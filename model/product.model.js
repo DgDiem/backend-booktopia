@@ -12,9 +12,9 @@ const productSchema = new Schema({
   price2: { type: Number, required: false },
   description: { type: String, required: true },
   quantity: { type: Number, required: true },
-  sale: { type: Number, required: false },
-  hot: { type: Number, default: 0},
-  view: { type: Number, default: 0},
+  sale: { type: Number, default: 0 },
+  hot: { type: Number, default: 0 },
+  view: { type: Number, default: 0 },
   publish: {
     type: {
       publishId: { type: ObjectId, required: true },
@@ -36,7 +36,7 @@ const productSchema = new Schema({
     },
     required: true,
   },
+  isActive: { type: Boolean, default: true },
 });
 
-module.exports =
-  mongoose.models.pros || mongoose.model("products", productSchema);
+module.exports = mongoose.models.pros || mongoose.model("products", productSchema);

@@ -86,7 +86,7 @@ async function deleteCate(id) {
     // kiểm tra xem trong publish có sản phẩm nào không
     const pros = await productModel.find({ "publish.publishId": id });
     if (pros.length > 0) {
-      return { mess: "publish có sản phẩm không thể xóa" };
+      return { mess: "Nhà xuất bản có sản phẩm không thể xóa" };
     } else {
       const result = await publishModel.findByIdAndDelete(id);
       return result;

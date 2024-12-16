@@ -18,6 +18,7 @@ const userSchema = new Schema({
   uid: { type: String, unique: true, required: false },
   displayName: { type: String }, // Tên hiển thị từ Firebase
   photoURL: { type: String }, // URL ảnh đại diện từ Firebase
+  isActive: { type: Boolean, default: true },
 });
 
 module.exports = mongoose.models.users || mongoose.model("users", userSchema);

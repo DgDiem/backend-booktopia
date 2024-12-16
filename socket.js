@@ -7,7 +7,7 @@ module.exports = {
     if (!io) {
       io = new Server(server, {
         cors: {
-          origin: "https://backend-booktopia.onrender.com",
+          origin: "http://localhost:3000",
           methods: ["GET", "POST"],
         },
       });

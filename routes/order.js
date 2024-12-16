@@ -57,17 +57,30 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+// router.delete("/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
+
+//     const canceledOrder = await orderController.cancelOrder(id);
+//     return res.status(200).json({ canceledOrder });
+//   } catch (error) {
+//     console.log("Lỗi khi hủy đơn hàng:", error);
+//     return res.status(500).json({ message: error.message });
+//   }
+// });
+
+router.put("/:id/cancel", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const canceledOrder = await orderController.cancelOrder(id);
-    return res.status(200).json({ canceledOrder });
+    const updatedOrder = await orderController.cancelStatusOrder(id);
+    return res.status(200).json({ updatedOrder });
   } catch (error) {
-    console.log("Lỗi khi hủy đơn hàng:", error);
+    console.log("Lỗi khi cập nhật trạng thái đơn hàng:", error);
     return res.status(500).json({ message: error.message });
   }
 });
+
 
 router.get("/user/:userId", async (req, res) => {
   try {

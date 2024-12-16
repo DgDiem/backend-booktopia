@@ -7,6 +7,7 @@ const blogSchema = new Schema({
   date: { type: Date, default: Date.now },
   image: { type: String, require: true },
   content: { type: String, require: true },
+  isActive: { type: Boolean, default: true },
 });
 
 module.exports = mongoose.models.blogs || mongoose.model("blogs", blogSchema);

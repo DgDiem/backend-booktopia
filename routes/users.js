@@ -50,6 +50,17 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   }
 });
 
+router.put("/:id/status", async (req, res) => {
+  const { id } = req.params;
+  const { isActive } = req.body;
+  try {
+    const updatedUser = await usersController.updateStatusById(id, isActive);
+    res.status(200).json({ message: "Cập nhật trạng thái thành công", data: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi cập nhật trạng thái", error: error.message });
+  }
+});
+
 // Lấy chi tiết user
 router.get("/:id", async (req, res) => {
   try {

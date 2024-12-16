@@ -11,6 +11,7 @@ module.exports = {
   getPendingOrders,
   getOrderStatusByProduct,
   handleReview,
+  cancelStatusOrder
 };
 
 async function getAll() {
@@ -148,6 +149,30 @@ async function cancelOrder(id) {
     throw new Error(error.message);
   }
 }
+
+async function cancelStatusOrder(id) {
+  try {
+    const order = await orderModel.findById(id);
+    if (!order) throw new Error("Đơn hàng không tồn tại");
+
+    // Chỉ cho phép cập nhật trạng thái "Đã hủy" nếu đơn hàng không phải "Đang vận chuyển"
+    if (order.status === "Đang vận chuyển") {
+      throw new Error("Đơn hàng đang được vận chuyển không thể hủy");
+    }
+
+    // Nếu đơn hàng đang ở trạng thái "Chờ xác nhận" hoặc "Đang xử lý", cập nhật thành "Đã hủy"
+    if (["Chờ xác nhận", "Đang xử lý"].includes(order.status)) {
+      order.status = "Đã hủy";
+      await order.save();
+      return { message: "Trạng thái đơn hàng đã được cập nhật thành công", order };
+    } else {
+      throw new Error("Không thể hủy đơn hàng ở trạng thái hiện tại");
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
 
 async function getOrdersByUserId(userId) {
   try {

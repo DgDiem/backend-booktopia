@@ -84,7 +84,7 @@ async function deleteCate(id) {
     // kiểm tra xem trong author có sản phẩm nào không
     const pros = await productModel.find({ "author.authorId": id });
     if (pros.length > 0) {
-      return { mess: "author có sản phẩm không thể xóa" };
+      return { mess: "Tác giả có sản phẩm không thể xóa" };
     } else {
       const result = await authorModel.findByIdAndDelete(id);
       return result;

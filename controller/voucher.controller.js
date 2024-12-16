@@ -7,11 +7,23 @@ module.exports = {
   deleteVoucher,
   applyVoucher,
   deactivateVoucher,
-  getVoucherById
+  getVoucherById,
+  updateStatusById,
+  getAllAdmin
 };
 
 // danh sách voucher
 async function getAll() {
+  try {
+    const res = await voucherModel.find({isActive: true});
+    return res;
+  } catch (error) {
+    console.log("Lỗi lấy danh sách voucher", error);
+    throw error;
+  }
+}
+
+async function getAllAdmin() {
   try {
     const res = await voucherModel.find();
     return res;
@@ -87,6 +99,22 @@ async function deleteVoucher(id) {
   }
 }
 // áp dụng voucher
+async function updateStatusById(id, isActive) {
+  try {
+    const cate = await voucherModel.findById(id);
+    if (!cate) {
+      throw new Error("Không tìm thấy danh mục");
+    }
+    const result = await voucherModel.findByIdAndUpdate(
+      id,
+      { isActive },
+      { new: true } 
+    );
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function applyVoucher(body) {
     try {

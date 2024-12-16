@@ -8,6 +8,8 @@ module.exports = {
   getCategoryByName,
   deleteCate,
   getCategoryById,
+  updateStatusById,
+  getAllAdmin
 };
 
 // Show tất cả danh mục
@@ -20,8 +22,17 @@ async function gettAll() {
     throw error;
   }
 }
+async function getAllAdmin() {
+  try {
+    const result = await categoryModel.find({ isActive: true });
+    return result;
+  } catch (error) {
+    console.log("Lỗi lấy sp", error);
+    throw error;
+  }
+}
 
-//
+// lấy sản phẩm theo danh mục
 async function getByCategory(category) {
   try {
     const productsCategory = await productModel.find({
@@ -29,7 +40,7 @@ async function getByCategory(category) {
     });
     return productsCategory;
   } catch (error) {
-    console.log("Lỗi lấy sản phẩm  theo ID danh mục", error);
+    console.log("Lỗi lấy sản phẩm theo ID danh mục", error);
     throw error;
   }
 }
@@ -79,6 +90,23 @@ async function updateById(id, body) {
     throw error;
   }
 }
+// update trạng thái isactive của category
+async function updateStatusById(id, isActive) {
+  try {
+    const cate = await categoryModel.findById(id);
+    if (!cate) {
+      throw new Error("Không tìm thấy danh mục");
+    }
+    const result = await categoryModel.findByIdAndUpdate(
+      id,
+      { isActive },
+      { new: true }
+    );
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
 
 // xóa danh mục theo id
 async function deleteCate(id) {
@@ -104,7 +132,7 @@ async function getCategoryById(id) {
     const proId = await categoryModel.findById(id);
     return proId;
   } catch (error) {
-    console.log("LỖI LAAYS CHI TIẾT SP", error);
+    console.log("LỖI LẤY CHI TIẾT SP", error);
     throw error;
   }
 }

@@ -9,6 +9,7 @@ module.exports = {
   getUserById,
   login,
   remove,
+  updateStatusById
 };
 
 // Đăng ký
@@ -105,6 +106,23 @@ async function updateById(id, body) {
     return result;
   } catch (error) {
     console.log("Lỗi cập nhật:", error);
+    throw error;
+  }
+}
+
+async function updateStatusById(id, isActive) {
+  try {
+    const user = await userModel.findById(id);
+    if (!user) {
+      throw new Error("Không tìm thấy người dùng");
+    }
+    const result = await userModel.findByIdAndUpdate(
+      id,
+      { isActive },
+      { new: true } 
+    );
+    return result;
+  } catch (error) {
     throw error;
   }
 }

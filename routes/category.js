@@ -18,6 +18,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/admin", async (req, res) => {
+  try {
+    const category = await categoryController.getAllAdmin();
+    return res.status(200).json(category);
+  } catch (error) {
+    console.log("Load danh muc không thành công", error);
+    res.status(500).json({ mess: error });
+  }
+});
+
 //Show danh mục theo ID
 router.get("/categoryId/:category", async (req, res, next) => {
   try {
@@ -32,7 +42,7 @@ router.get("/categoryId/:category", async (req, res, next) => {
 });
 
 // Thêm danh mục mơi
-router.post("/", [authen([1])], async (req, res) => {
+router.post("/",  async (req, res) => {
   try {
     const body = req.body;
     const result = await categoryController.insert(body);
@@ -44,7 +54,7 @@ router.post("/", [authen([1])], async (req, res) => {
 });
 
 //Sửa danh mục theo id
-router.put("/:id", [authen([1])], async (req, res) => {
+router.put("/:id",  async (req, res) => {
   try {
     const { id } = req.params;
     const body = req.body;
@@ -56,6 +66,16 @@ router.put("/:id", [authen([1])], async (req, res) => {
   }
 });
 
+router.put("/:id/status", async (req, res) => {
+  const { id } = req.params;
+  const { isActive } = req.body;
+  try {
+    const updatedCategory = await categoryController.updateStatusById(id, isActive);
+    res.status(200).json({ message: "Cập nhật trạng thái thành công", data: updatedCategory });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi cập nhật trạng thái", error: error.message });
+  }
+});
 // chi tiết category
 
 router.get("/:id", async (req, res) => {
@@ -71,9 +91,9 @@ router.get("/:id", async (req, res) => {
 });
 
 //Xóa danh mục theo id
-router.delete("/delete/:id", [authen([1])], async (req, res) => {
+router.delete("/delete/:id",async (req, res) => {
   try {
-    const { id } = req.params; // lấy đượccái id mà người dùng gửi lên
+    const { id } = req.params; // lấy được cái id mà người dùng gửi lên
     const cateDel = await categoryController.deleteCate(id);
     console.log("Xóa danh mục thành công");
     return res.status(200).json(cateDel);
